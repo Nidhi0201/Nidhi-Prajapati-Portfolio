@@ -29,9 +29,7 @@ A modern, interactive portfolio website built with Next.js, TypeScript, and Tail
 ### Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/YOUR_USERNAME/np-portfolio-website.git
-cd np-portfolio-website
+git clone httpsithub.com/N01/Nhijapati-Prajapati.gitPortfolio.gitidhi-P-Portfolioapati-Portfolio
 ```
 
 2. Install dependencies:
