@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0 0;
+  --foreground: 245 245 248;
+  --card: 10 10 14;
+  --border: 255 255 255;
+  --accent: 192 132 252;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: rgb(var(--background));
+}
+
+section[id] {
+  scroll-margin-top: 96px;
+}
+
+.rocket-fall {
+  position: absolute;
+  top: -40px;
+  transform: translate3d(0, 0, 0);
+  animation-name: rocket-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 10px rgb(var(--accent) / 0.35))
+    drop-shadow(0 0 22px rgb(var(--accent) / 0.22));
+}
+
+@keyframes rocket-fall {
+  0% {
+    transform: translate3d(var(--start-x, 0px), var(--start-y, 110vh), 0) rotate(-18deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(calc(var(--start-x, 0px) + var(--drift, 0px)), -140px, 0) rotate(22deg);
+    opacity: 0;
+  }
+}
+
+::selection {
+  background: rgb(var(--accent) / 0.25);
+}
+
