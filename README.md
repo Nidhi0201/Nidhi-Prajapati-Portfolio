@@ -1,4 +1,4 @@
-# NP Portfolio Website
+# Nidhi Prajapati Portfolio Website
 
 A modern, interactive portfolio website built with Next.js, TypeScript, and Tailwind CSS.
 
