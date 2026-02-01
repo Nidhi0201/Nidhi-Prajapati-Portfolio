@@ -25,10 +25,6 @@ export const metadata: Metadata = {
     "Next.js",
   ],
   authors: [{ name: "Nidhi Prajapati" }],
-  icons: {
-    icon: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
   openGraph: {
     title: "Nidhi Prajapati | Portfolio",
     description:
