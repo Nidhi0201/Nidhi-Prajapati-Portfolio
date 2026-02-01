@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Reveal from "@/components/Reveal";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { SectionContainer } from "@/components/ui";
+import Badge from "@/components/ui/Badge";
 
 type ExperienceItem = {
   role: string;
@@ -12,33 +14,48 @@ type ExperienceItem = {
   icon: string;
   iconType?: "emoji" | "image";
   bullets: string[];
+  expanded?: boolean;
 };
 
 const ITEMS: ExperienceItem[] = [
   {
-    role: "Learning Assistant",
-    org: "CSUEB STEM Lab",
-    dates: "Jan 2023 – Apr 2024",
-    year: "2023",
-    icon: "/STEM LAB.png",
+    role: "Vice President",
+    org: "Google Developer Groups on Campus, CSUEB",
+    dates: "Aug 2025 – Present",
+    year: "2025",
+    icon: "/gdg.png",
     iconType: "image",
     bullets: [
-      "Supported students through guided practice, explanations, and structured study sessions.",
-      "Reinforced core problem-solving patterns and fundamentals in a collaborative setting.",
-      "Helped create a welcoming learning environment for diverse student groups.",
+      "Help lead a campus developer community through workshops, events, and collaboration.",
+      "Support student developers and coordinate with cross-functional teams to ship event plans.",
+      "Drive consistent execution and learning-focused programming for members.",
     ],
   },
   {
-    role: "Operations Team",
+    role: "President",
     org: "HackHayward",
-    dates: "Jul 2024 – Present",
-    year: "2024",
+    dates: "Aug 2025 – Present",
+    year: "2025",
     icon: "/hackhayward-logo.png",
     iconType: "image",
     bullets: [
-      "Support event operations for workshops and hackathon activities.",
-      "Troubleshoot on-site issues quickly and help attendees stay unblocked.",
-      "Coordinate with volunteers to maintain a high-quality event flow.",
+      "Lead hackathon strategy, team coordination, and partner communications.",
+      "Work closely with organizers and mentors to create a great developer experience.",
+      "Drive initiatives that improve event operations and attendee success.",
+    ],
+  },
+  {
+    role: "Student Assistant",
+    org: "College Link Program, CSUEB",
+    dates: "Aug 2025 – Present",
+    year: "2025",
+    icon: "/college-link.png",
+    iconType: "image",
+    bullets: [
+      "Support students with Autism Spectrum Disorder (ASD) using structured workflows and clear documentation.",
+      "Maintain consistent progress tracking and provide individualized coaching in a high-responsibility environment.",
+      "Collaborate with program coordinators to develop inclusive strategies that promote student independence and success.",
+      "Facilitate weekly check-ins and in-class support to build executive functioning and problem-solving skills.",
     ],
   },
   {
@@ -55,42 +72,29 @@ const ITEMS: ExperienceItem[] = [
     ],
   },
   {
-    role: "Vice President",
+    role: "Operations Team",
     org: "HackHayward",
-    dates: "Aug 2025 – Present",
-    year: "2025",
+    dates: "Jul 2024 – Present",
+    year: "2024",
     icon: "/hackhayward-logo.png",
     iconType: "image",
     bullets: [
-      "Support hackathon strategy, team coordination, and partner communications.",
-      "Work closely with organizers and mentors to create a great developer experience.",
-      "Lead initiatives that improve event operations and attendee success.",
+      "Support event operations for workshops and hackathon activities.",
+      "Troubleshoot on-site issues quickly and help attendees stay unblocked.",
+      "Coordinate with volunteers to maintain a high-quality event flow.",
     ],
   },
   {
-    role: "Vice President",
-    org: "Google Developer Groups on Campus, CSUEB",
-    dates: "Aug 2025 – Present",
-    year: "2025",
-    icon: "/gdg.png",
+    role: "Learning Assistant",
+    org: "CSUEB STEM Lab",
+    dates: "Jan 2023 – Apr 2024",
+    year: "2023",
+    icon: "/STEM LAB.png",
     iconType: "image",
     bullets: [
-      "Help lead a campus developer community through workshops, events, and collaboration.",
-      "Support student developers and coordinate with cross-functional teams to ship event plans.",
-      "Drive consistent execution and learning-focused programming for members.",
-    ],
-  },
-  {
-    role: "Student Assistant",
-    org: "College Link Program",
-    dates: "Aug 2025 – Present",
-    year: "2025",
-    icon: "/EAST BAY.png",
-    iconType: "image",
-    bullets: [
-      "Coach students with Autism Spectrum Disorder (ASD) to support academic, social, and independent living success.",
-      "Facilitate weekly coaching, check-ins, and in-class shadowing to build executive functioning and problem-solving skills.",
-      "Collaborate with coordinators and coaching teams to track progress, promote independence, and ensure student success.",
+      "Supported students through guided practice, explanations, and structured study sessions.",
+      "Reinforced core problem-solving patterns and fundamentals in a collaborative setting.",
+      "Helped create a welcoming learning environment for diverse student groups.",
     ],
   },
 ];
@@ -129,83 +133,96 @@ function TimelineLine() {
   return (
     <div
       ref={lineRef}
-      className="absolute left-6 top-0 h-full w-1 overflow-hidden rounded-full bg-border/10 md:left-1/2 md:-ml-0.5"
+      className="absolute left-6 top-0 h-full w-0.5 overflow-hidden rounded-full bg-border/10 md:left-1/2 md:-ml-px"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-accent/20 via-accent/10 to-transparent" />
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-accent/5 to-transparent" />
+      
+      {/* Progress fill */}
       <div
-        className="absolute left-0 top-0 w-full rounded-full bg-gradient-to-b from-accent via-accent/80 to-accent/60 transition-all duration-150 ease-out"
+        className="absolute left-0 top-0 w-full rounded-full bg-gradient-to-b from-accent via-accent/80 to-accent-light transition-all duration-150 ease-out"
         style={{ height: `${progress}%` }}
       >
-        <div className="absolute -bottom-4 left-1/2 h-8 w-8 -translate-x-1/2 rounded-full bg-accent/60 blur-xl" />
+        {/* Glow at the bottom of progress */}
+        <div className="absolute -bottom-2 left-1/2 h-6 w-6 -translate-x-1/2 rounded-full bg-accent/60 blur-lg" />
       </div>
     </div>
   );
 }
 
-export default function Experience() {
-  let lastYear = "";
+function ExperienceCard({
+  item,
+  index,
+  isExpanded,
+  onToggle,
+}: {
+  item: ExperienceItem;
+  index: number;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
+  const isLeft = index % 2 === 0;
 
   return (
-    <div>
-      <Reveal>
-        <div className="mb-12 text-center">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Experience &amp; Leadership
-          </h2>
-          <p className="mt-3 text-sm text-foreground/60">My journey so far</p>
-          <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-accent/90 to-accent/30" />
-        </div>
-      </Reveal>
-
-      <div className="relative">
-        <TimelineLine />
-
-        <div className="space-y-8">
-          {ITEMS.map((item, idx) => {
-            const isLeft = idx % 2 === 0;
-            const showYear = item.year !== lastYear;
-            lastYear = item.year;
-
-            return (
-              <Reveal key={item.role + item.org} delayMs={idx * 80}>
-                <div className="relative">
-                  {/* Dot */}
-                  <div className="absolute left-6 top-2 h-5 w-5 -translate-x-1/2 rounded-full border-2 border-accent/50 bg-background shadow-sm md:left-1/2 md:-translate-x-1/2">
-                    <div className="absolute inset-1 rounded-full bg-accent/70 blur-sm opacity-50" />
-                    <div className="absolute inset-0 rounded-full bg-accent/40" />
-                  </div>
-
-                  <div className="md:grid md:grid-cols-[1fr_1fr] md:gap-10">
-                    {isLeft ? (
-                      <>
-                        <div className="md:col-start-1 md:flex md:justify-end">
-                          <ExperienceCard item={item} align="right" />
-                        </div>
-                        <div className="md:col-start-2" />
-                      </>
-                    ) : (
-                      <>
-                        <div className="md:col-start-1" />
-                        <div className="md:col-start-2 md:flex md:justify-start">
-                          <ExperienceCard item={item} align="left" />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="relative"
+    >
+      {/* Timeline dot */}
+      <div className="absolute left-6 top-3 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-accent/50 bg-background md:left-1/2">
+        <div className="absolute inset-0.5 rounded-full bg-accent/70" />
       </div>
-    </div>
+
+      {/* Card positioning for alternating layout */}
+      <div className="md:grid md:grid-cols-[1fr_1fr] md:gap-10">
+        {isLeft ? (
+          <>
+            <div className="md:col-start-1 md:flex md:justify-end">
+              <ExperienceCardContent
+                item={item}
+                align="right"
+                isExpanded={isExpanded}
+                onToggle={onToggle}
+              />
+            </div>
+            <div className="md:col-start-2" />
+          </>
+        ) : (
+          <>
+            <div className="md:col-start-1" />
+            <div className="md:col-start-2 md:flex md:justify-start">
+              <ExperienceCardContent
+                item={item}
+                align="left"
+                isExpanded={isExpanded}
+                onToggle={onToggle}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </motion.div>
   );
 }
 
-function ExperienceCard({ item, align }: { item: ExperienceItem; align: "left" | "right" }) {
+function ExperienceCardContent({
+  item,
+  align,
+  isExpanded,
+  onToggle,
+}: {
+  item: ExperienceItem;
+  align: "left" | "right";
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <div className="ml-14 md:ml-0 md:w-[88%]">
-      <div className="group relative rounded-2xl border border-border/20 bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-glow">
+    <div className="ml-14 md:ml-0 md:w-[90%]">
+      <div className="group relative rounded-2xl glass border-border/8 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover hover:border-accent/20">
+        {/* Organization icon */}
         <div className="absolute -top-3 right-4 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-accent/30 bg-white shadow-sm">
           {item.iconType === "image" ? (
             <Image
@@ -220,26 +237,134 @@ function ExperienceCard({ item, align }: { item: ExperienceItem; align: "left" |
           )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="text-left">
+        {/* Header */}
+        <div className="flex items-start gap-3 pr-12">
+          <div className="flex-1 text-left">
             <h3 className="text-base font-semibold text-foreground">{item.role}</h3>
-            <p className="text-sm text-foreground/70">{item.org}</p>
+            <p className="text-sm text-muted">{item.org}</p>
           </div>
-          <span className="ml-auto text-xs text-foreground/50 whitespace-nowrap">{item.dates}</span>
+          <Badge variant="outline" size="sm" className="flex-shrink-0">
+            {item.dates}
+          </Badge>
         </div>
 
-        <ul className="mt-3 space-y-2 text-sm text-foreground/70 text-left">
-          {item.bullets.map((b) => (
-            <li key={b} className="flex items-start gap-2">
-              <span className="text-accent">•</span>
-              <span>{b}</span>
-            </li>
-          ))}
-        </ul>
+        {/* Bullets - Collapsible */}
+        <AnimatePresence initial={false}>
+          {isExpanded && (
+            <motion.ul
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-4 space-y-2 text-sm text-muted text-left overflow-hidden"
+            >
+              {item.bullets.map((b, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="flex items-start gap-2"
+                >
+                  <span className="text-accent mt-1.5 h-1 w-1 rounded-full bg-accent flex-shrink-0" />
+                  <span>{b}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
 
-        <div className="absolute bottom-0 left-0 h-0.5 w-0 rounded-full bg-gradient-to-r from-accent/60 to-transparent transition-all duration-300 group-hover:w-full" />
+        {/* Toggle button */}
+        <button
+          onClick={onToggle}
+          className="mt-3 flex items-center gap-1 text-xs text-accent-light hover:text-accent transition-colors"
+        >
+          {isExpanded ? (
+            <>
+              <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+              Show less
+            </>
+          ) : (
+            <>
+              <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+              Show details
+            </>
+          )}
+        </button>
+
+        {/* Bottom accent line on hover */}
+        <div className="absolute bottom-0 left-0 h-0.5 w-0 rounded-full bg-gradient-to-r from-accent to-accent-light transition-all duration-300 group-hover:w-full" />
       </div>
     </div>
   );
 }
 
+export default function Experience() {
+  const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set([0]));
+
+  const toggleItem = (index: number) => {
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
+  const expandAll = () => {
+    setExpandedItems(new Set(ITEMS.map((_, i) => i)));
+  };
+
+  const collapseAll = () => {
+    setExpandedItems(new Set());
+  };
+
+  return (
+    <SectionContainer
+      id="experience"
+      title="Experience & Leadership"
+      subtitle="My journey in tech and community building"
+      centered
+    >
+      {/* Expand/Collapse controls */}
+      <div className="mb-8 flex justify-center gap-2">
+        <button
+          onClick={expandAll}
+          className="text-xs text-muted hover:text-foreground transition-colors px-3 py-1 rounded-full border border-border/10 hover:border-accent/20"
+        >
+          Expand all
+        </button>
+        <button
+          onClick={collapseAll}
+          className="text-xs text-muted hover:text-foreground transition-colors px-3 py-1 rounded-full border border-border/10 hover:border-accent/20"
+        >
+          Collapse all
+        </button>
+      </div>
+
+      {/* Timeline */}
+      <div className="relative">
+        <TimelineLine />
+
+        <div className="space-y-8">
+          {ITEMS.map((item, idx) => (
+            <ExperienceCard
+              key={item.role + item.org}
+              item={item}
+              index={idx}
+              isExpanded={expandedItems.has(idx)}
+              onToggle={() => toggleItem(idx)}
+            />
+          ))}
+        </div>
+      </div>
+    </SectionContainer>
+  );
+}

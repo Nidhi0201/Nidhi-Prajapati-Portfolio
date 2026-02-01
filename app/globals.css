@@ -3,11 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0 0;
+  /* Background: near-black, not pure black */
+  --background: 8 8 12;
+  --background-elevated: 14 14 20;
+  
+  /* Dark purple accent (premium, less neon) */
+  --accent: 124 58 237;
+  --accent-light: 147 84 255;
+  --accent-glow: 124 58 237;
+  
+  /* Surfaces */
+  --card: 18 18 24;
+  --card-border: 255 255 255;
+  
+  /* Text */
   --foreground: 245 245 248;
-  --card: 10 10 14;
+  --muted: 156 163 175;
+  
+  /* Border */
   --border: 255 255 255;
-  --accent: 192 132 252;
 }
 
 html,
@@ -19,10 +33,176 @@ body {
   background: rgb(var(--background));
 }
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll margin for anchor links */
 section[id] {
   scroll-margin-top: 96px;
 }
 
+/* Selection styling */
+::selection {
+  background: rgb(var(--accent) / 0.25);
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+}
+
+/* Grid background pattern */
+.grid-background {
+  background-image: 
+    linear-gradient(rgb(var(--accent) / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--accent) / 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Corner glow effects */
+.corner-glow {
+  position: relative;
+}
+
+.corner-glow::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: -10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, rgb(var(--accent) / 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.corner-glow::after {
+  content: '';
+  position: fixed;
+  bottom: -20%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgb(var(--accent) / 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glassmorphism utilities */
+@layer utilities {
+  .glass {
+    background: rgb(var(--card) / 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgb(var(--border) / 0.08);
+  }
+  
+  .glass-strong {
+    background: rgb(var(--card) / 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgb(var(--border) / 0.1);
+  }
+}
+
+/* Shine effect for cards */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.05),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.shine-effect:hover::before {
+  left: 100%;
+}
+
+/* Glow animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgb(var(--accent) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgb(var(--accent) / 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Rocket fall animation (existing) */
 .rocket-fall {
   position: absolute;
   top: -40px;
@@ -49,7 +229,21 @@ section[id] {
   }
 }
 
-::selection {
-  background: rgb(var(--accent) / 0.25);
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
+::-webkit-scrollbar-track {
+  background: rgb(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent) / 0.5);
+}

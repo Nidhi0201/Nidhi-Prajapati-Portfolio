@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import dynamic from "next/dynamic";
 
-const VantaBackground = dynamic(() => import("@/components/VantaBackground"), { ssr: false });
-const RocketRain = dynamic(() => import("@/components/RocketRain"), { ssr: false });
+const GridBackground = dynamic(() => import("@/components/GridBackground"), {
+  ssr: false,
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,7 +14,23 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Nidhi Prajapati | Portfolio",
-  description: "Personal portfolio of Nidhi Prajapati.",
+  description:
+    "Personal portfolio of Nidhi Prajapati - Computer Science student, aspiring SWE, and community leader.",
+  keywords: [
+    "Nidhi Prajapati",
+    "Software Engineer",
+    "Portfolio",
+    "Web Developer",
+    "React",
+    "Next.js",
+  ],
+  authors: [{ name: "Nidhi Prajapati" }],
+  openGraph: {
+    title: "Nidhi Prajapati | Portfolio",
+    description:
+      "Personal portfolio of Nidhi Prajapati - Computer Science student and aspiring SWE.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -26,11 +43,9 @@ export default function RootLayout({
       <body
         className={`${inter.className} min-h-screen bg-background text-foreground antialiased`}
       >
-        <VantaBackground />
-        <RocketRain />
+        <GridBackground />
         <div className="relative z-10">{children}</div>
       </body>
     </html>
   );
 }
-

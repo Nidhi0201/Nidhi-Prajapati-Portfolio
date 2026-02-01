@@ -1,44 +1,83 @@
+"use client";
+
+import { useState, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Education from "@/components/Education";
 import TechStack from "@/components/TechStack";
-import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
+import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
+import CommandPalette from "@/components/CommandPalette";
+import BackToTop from "@/components/BackToTop";
 
 export default function Page() {
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+
+  const openCommandPalette = useCallback(() => {
+    setCommandPaletteOpen(true);
+  }, []);
+
+  const closeCommandPalette = useCallback(() => {
+    setCommandPaletteOpen(false);
+  }, []);
+
   return (
     <>
-      <Navbar />
+      <Navbar onOpenCommandPalette={openCommandPalette} />
+      
       <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <section id="hero" className="pt-8 pb-12 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-20">
+        {/* Hero Section */}
+        <section id="hero" className="py-8 sm:py-12 lg:py-16">
           <Hero />
         </section>
-        <section id="about" className="py-20 sm:py-28 lg:py-32">
+
+        {/* About Section */}
+        <section id="about" className="py-8 sm:py-10">
           <About />
         </section>
-        <section id="education" className="py-20 sm:py-28 lg:py-32">
+
+        {/* Education Section */}
+        <section id="education" className="py-8 sm:py-10">
           <Education />
         </section>
-        <section id="techstack" className="py-20 sm:py-28 lg:py-32">
+
+        {/* Tech Stack Section */}
+        <section id="techstack" className="py-8 sm:py-10">
           <TechStack />
         </section>
-        <section id="experience" className="py-20 sm:py-28 lg:py-32">
-          <Experience />
-        </section>
-        <section id="projects" className="py-20 sm:py-28 lg:py-32">
+
+        {/* Projects Section */}
+        <section id="projects" className="py-8 sm:py-10">
           <Projects />
         </section>
-        <section id="skills" className="py-20 sm:py-28 lg:py-32">
+
+        {/* Experience Section */}
+        <section id="experience" className="py-8 sm:py-10">
+          <Experience />
+        </section>
+
+        {/* Skills Section */}
+        <section id="skills" className="py-8 sm:py-10">
           <Skills />
         </section>
-        <section id="contact" className="py-20 sm:py-28 lg:py-32">
+
+        {/* Contact Section */}
+        <section id="contact" className="py-8 sm:py-10">
           <Contact />
         </section>
       </main>
+
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={commandPaletteOpen}
+        onClose={closeCommandPalette}
+      />
+
+      {/* Back to Top Button */}
+      <BackToTop />
     </>
   );
 }
-
