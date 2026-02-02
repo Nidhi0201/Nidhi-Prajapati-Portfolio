@@ -13,6 +13,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/logo.png', type: 'image/png' },
+    ],
+    apple: '/logo.png',
+  },
   title: "Nidhi Prajapati | Portfolio",
   description:
     "Personal portfolio of Nidhi Prajapati - Computer Science student, aspiring SWE, and community leader.",
