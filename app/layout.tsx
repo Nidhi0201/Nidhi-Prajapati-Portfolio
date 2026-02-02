@@ -14,11 +14,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/logo.png', type: 'image/png' },
-    ],
-    apple: '/logo.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   title: "Nidhi Prajapati | Portfolio",
   description:
@@ -47,6 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+      </head>
       <body
         className={`${inter.className} min-h-screen bg-background text-foreground antialiased`}
       >
